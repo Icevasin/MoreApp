@@ -17,7 +17,6 @@ return new class extends Migration
             $table->id();
             $table->date("Record_date");
             $table->integer("Model_id");
-            $table->integer("Brand_id");
             $table->integer("Employee_id");
             $table->timestamps();
         });

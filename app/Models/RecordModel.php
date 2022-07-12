@@ -11,7 +11,6 @@ class RecordModel extends Model
     protected $fillable = [
         'Record_date',
         'Model_id',
-        'Brand_id',
         'Employee_id'
     ];
 }

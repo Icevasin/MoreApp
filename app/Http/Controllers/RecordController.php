@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\RecordModel;
+use App\Models\Brand;
 class RecordController extends Controller
 {
     /**
@@ -103,21 +104,73 @@ class RecordController extends Controller
 
     public function searchone(Request $request)
     {
-        $brand = $request->brand;
         $start = $request->start;
         $end = $request->end;
-        $model = $request->model;
-        $record = RecordModel::LeftJoin('brands','brands.id','=','record_models.Brand_id')
-                ->LeftJoin('car_models','car_models.id','=','record_models.Model_id')
+        $brand = $request->brand;
+        $record = RecordModel::LeftJoin('car_models','car_models.id','=','record_models.Model_id')
+                ->LeftJoin('brands','brands.id','=','car_models.Brand_id')
                 ->LeftJoin('employee_models','employee_models.id','=','record_models.Employee_id')
-                ->select('brands.Brand_name','car_models.CarModel_name','record_models.Record_date','employee_models.Employee_firstname','employee_models.Employee_lastname')
-                ->where('record_models.Brand_id','like','%'.$brand.'%')
+                ->select('brands.Brand_name as Brand',Brand::raw("COUNT(brands.id) as ขายได้"))
+                ->where('car_models.Brand_id','like','%'.$brand.'%')
+                ->WhereBetween('record_models.Record_date',[$start,$end])
+                ->groupBy('Brand')
+                ->orderBy('record_models.Record_date', 'ASC','brands.Brand_name')
+                ->get();
+                return [$record,'ระหว่างวันที่ ',$start,'ถึง',$end];
+        
+    }
+
+    public function searchtwo(Request $request)
+    {
+        $start = $request->start;
+        $end = $request->end;
+        $brand = $request->brand;
+        $model = $request->model;
+        $record = RecordModel::LeftJoin('car_models','car_models.id','=','record_models.Model_id')
+                ->LeftJoin('brands','brands.id','=','car_models.Brand_id')
+                ->LeftJoin('employee_models','employee_models.id','=','record_models.Employee_id')
+                ->select('brands.Brand_name as Brand','car_models.CarModel_name as Model',Brand::raw("COUNT(brands.id) as ขายได้"))
+                ->where('car_models.Brand_id','like','%'.$brand.'%')
                 ->where('record_models.Model_id','like','%'.$model.'%')
                 ->WhereBetween('record_models.Record_date',[$start,$end])
-                ->orderBy('record_models.Record_date', 'ASC')
+                ->groupBy('Brand','Model')
+                ->orderBy('record_models.Record_date', 'ASC','brands.Brand_name')
                 ->get();
-        $count = $record->count();
-        return [$record,'จำนวนที่ขายได้',$count];
+        return [$record,'ระหว่างวันที่ ',$start,'ถึง',$end];
+        
+    }
+
+    public function searchthree(Request $request)
+    {
+        $start = $request->start;
+        $end = $request->end;
+        $employee = $request->employee;
+        $record = RecordModel::LeftJoin('car_models','car_models.id','=','record_models.Model_id')
+                ->LeftJoin('brands','brands.id','=','car_models.Brand_id')
+                ->LeftJoin('employee_models','employee_models.id','=','record_models.Employee_id')
+                ->select('brands.Brand_name as Brand','car_models.CarModel_name as model',Brand::raw("COUNT(brands.id) as ขายได้"))
+                ->where('record_models.Employee_id','like','%'.$employee.'%')
+                ->WhereBetween('record_models.Record_date',[$start,$end])
+                ->groupBy('Brand','model')
+                ->orderBy('record_models.Record_date', 'ASC','brands.Brand_name')
+                ->get();
+        return [$record,'ระหว่างวันที่ ',$start,'ถึง',$end];
         
     }
 }
+
+// $brand = $request->brand;
+// $start = $request->start;
+// $end = $request->end;
+// $model = $request->model;
+// $record = RecordModel::LeftJoin('brands','brands.id','=','record_models.Brand_id')
+//         ->LeftJoin('car_models','car_models.id','=','record_models.Model_id')
+//         ->LeftJoin('employee_models','employee_models.id','=','record_models.Employee_id')
+//         ->select('brands.Brand_name','car_models.CarModel_name','record_models.Record_date','employee_models.Employee_firstname','employee_models.Employee_lastname')
+//         ->where('record_models.Brand_id','like','%'.$brand.'%')
+//         ->where('record_models.Model_id','like','%'.$model.'%')
+//         ->WhereBetween('record_models.Record_date',[$start,$end])
+//         ->orderBy('record_models.Record_date', 'ASC')
+//         ->get();
+// $count = $record->count();
+// return [$record,'จำนวนที่ขายได้',$count];

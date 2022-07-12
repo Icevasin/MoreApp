@@ -28,7 +28,9 @@ Route::get('/employee/search/{name}',[EmployeeController::class, 'search']);
 Route::resource('record',RecordController::class);
 Route::get('/record/search/{name}',[RecordController::class, 'search']);
 
-Route::post('/record/searchdate',[RecordController::class, 'searchone']);
+Route::post('/record/searchone',[RecordController::class, 'searchone']);
+Route::post('/record/searchtwo',[RecordController::class, 'searchtwo']);
+Route::post('/record/searchthree',[RecordController::class, 'searchthree']);
 
 // Route::get('/brands',[BrandController::class, 'index']);
 // Route::post('/brands',[BrandController::class, 'store']);

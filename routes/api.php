@@ -2,6 +2,7 @@
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CarModelController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\RecordController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,6 +24,9 @@ Route::get('/models/search/{name}',[CarModelController::class, 'search']);
 
 Route::resource('employee',EmployeeController::class);
 Route::get('/employee/search/{name}',[EmployeeController::class, 'search']);
+
+Route::resource('record',RecordController::class);
+Route::get('/record/search/{name}',[RecordController::class, 'search']);
 
 // Route::get('/brands',[BrandController::class, 'index']);
 // Route::post('/brands',[BrandController::class, 'store']);

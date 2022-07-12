@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\RecordModel;
 class RecordController extends Controller
 {
     /**
@@ -13,7 +13,7 @@ class RecordController extends Controller
      */
     public function index()
     {
-        //
+        return RecordModel::all();
     }
 
     /**
@@ -34,7 +34,13 @@ class RecordController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'Record_date' => 'required',
+            'Model_id' => 'required',
+            'Brand_id' => 'required',
+            'Employee_id' => 'required',
+        ]);
+        return RecordModel::create($request->all());
     }
 
     /**
@@ -45,7 +51,7 @@ class RecordController extends Controller
      */
     public function show($id)
     {
-        //
+        return RecordModel::find($id);
     }
 
     /**
@@ -56,7 +62,7 @@ class RecordController extends Controller
      */
     public function edit($id)
     {
-        //
+        
     }
 
     /**
@@ -68,7 +74,9 @@ class RecordController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $record = RecordModel::find($id);
+        $record->update($request->all());
+        return $record;
     }
 
     /**
@@ -79,6 +87,17 @@ class RecordController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return RecordModel::destroy($id);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  str  $name
+     * @return \Illuminate\Http\Response
+     */
+    public function search($name)
+    {
+        return RecordModel::where('Employee_firstname','like','%'.$name.'%')->get();
     }
 }

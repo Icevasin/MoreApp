@@ -100,4 +100,17 @@ class RecordController extends Controller
     {
         return RecordModel::where('Employee_firstname','like','%'.$name.'%')->get();
     }
+
+    public function searchdate(Request $request)
+    {
+        $brand = $request->brand;
+        $start = date($request->start);
+        $end = date($request->end);
+        $record = RecordModel::LeftJoin('brands','brands.id','=','record_models.Brand_id')
+                ->select('brands.Brand_name','record_models.Record_date')
+                ->WhereBetween('record_models.Record_date',[$start,$end])->get();
+        $count = $record->count();
+        return [$record,$count];
+        
+    }
 }

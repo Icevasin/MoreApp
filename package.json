@@ -4,6 +4,9 @@
         "dev": "vite",
         "build": "vite build"
     },
+    "require": {
+        "ext-pdo_sqlite": "*"
+    },
     "devDependencies": {
         "axios": "^0.25",
         "laravel-vite-plugin": "^0.2.1",

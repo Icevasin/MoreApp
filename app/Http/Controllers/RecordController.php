@@ -101,16 +101,23 @@ class RecordController extends Controller
         return RecordModel::where('Employee_firstname','like','%'.$name.'%')->get();
     }
 
-    public function searchdate(Request $request)
+    public function searchone(Request $request)
     {
         $brand = $request->brand;
-        $start = date($request->start);
-        $end = date($request->end);
+        $start = $request->start;
+        $end = $request->end;
+        $model = $request->model;
         $record = RecordModel::LeftJoin('brands','brands.id','=','record_models.Brand_id')
-                ->select('brands.Brand_name','record_models.Record_date')
-                ->WhereBetween('record_models.Record_date',[$start,$end])->get();
+                ->LeftJoin('car_models','car_models.id','=','record_models.Model_id')
+                ->LeftJoin('employee_models','employee_models.id','=','record_models.Employee_id')
+                ->select('brands.Brand_name','car_models.CarModel_name','record_models.Record_date','employee_models.Employee_firstname','employee_models.Employee_lastname')
+                ->where('record_models.Brand_id','like','%'.$brand.'%')
+                ->where('record_models.Model_id','like','%'.$model.'%')
+                ->WhereBetween('record_models.Record_date',[$start,$end])
+                ->orderBy('record_models.Record_date', 'ASC')
+                ->get();
         $count = $record->count();
-        return [$record,$count];
+        return [$record,'จำนวนที่ขายได้',$count];
         
     }
 }

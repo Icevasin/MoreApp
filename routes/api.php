@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\CarModelController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,7 +15,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::resource('brands',BrandController::class);
-Route::get('/brands/search/{namae}',[BrandController::class, 'search']);
+Route::get('/brands/search/{name}',[BrandController::class, 'search']);
+
+Route::resource('models',CarModelController::class);
+Route::get('/models/search/{name}',[CarModelController::class, 'search']);
 
 // Route::get('/brands',[BrandController::class, 'index']);
 // Route::post('/brands',[BrandController::class, 'store']);

@@ -97,10 +97,10 @@ class RecordController extends Controller
      * @param  str  $name
      * @return \Illuminate\Http\Response
      */
-    public function search($name)
-    {
-        return RecordModel::where('Employee_firstname','like','%'.$name.'%')->get();
-    }
+    // public function search($name)
+    // {
+    //     return RecordModel::where('Employee_firstname','like','%'.$name.'%')->get();
+    // }
 
     public function searchone(Request $request)
     {
@@ -148,7 +148,7 @@ class RecordController extends Controller
         $record = RecordModel::LeftJoin('car_models','car_models.id','=','record_models.Model_id')
                 ->LeftJoin('brands','brands.id','=','car_models.Brand_id')
                 ->LeftJoin('employee_models','employee_models.id','=','record_models.Employee_id')
-                ->select('brands.Brand_name as Brand','car_models.CarModel_name as model',Brand::raw("COUNT(brands.id) as ขายได้"))
+                ->select('brands.Brand_name as Brand','car_models.CarModel_name as model','employee_models.Employee_firstname',Brand::raw("COUNT(brands.id) as ขายได้"))
                 ->where('record_models.Employee_id','like','%'.$employee.'%')
                 ->WhereBetween('record_models.Record_date',[$start,$end])
                 ->groupBy('Brand','model')

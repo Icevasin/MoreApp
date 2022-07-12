@@ -26,7 +26,7 @@ Route::resource('employee',EmployeeController::class);
 Route::get('/employee/search/{name}',[EmployeeController::class, 'search']);
 
 Route::resource('record',RecordController::class);
-Route::get('/record/search/{name}',[RecordController::class, 'search']);
+// Route::get('/record/search/{name}',[RecordController::class, 'search']);
 
 Route::post('/record/searchone',[RecordController::class, 'searchone']);
 Route::post('/record/searchtwo',[RecordController::class, 'searchtwo']);
